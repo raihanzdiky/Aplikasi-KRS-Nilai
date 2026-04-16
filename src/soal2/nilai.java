@@ -15,6 +15,7 @@ public class nilai extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         loadMatkul();
+        tampilData();
     }
 
     private String getGrade(double nilai) {
@@ -423,7 +424,6 @@ public class nilai extends javax.swing.JFrame {
                 return;
             }
 
-            // 4. Simpan Data (Sesuaikan nama kolom tabel tb_nilai kamu)
             String grade = getGrade(nilaiVal);
             String status = getStatus(grade);
             String sqlIn = "INSERT INTO tb_nilai(idm, idmk, nakhir, grade, status_akhir) VALUES (?,?,?,?,?)";
@@ -557,7 +557,7 @@ public class nilai extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnclActionPerformed
 
-    /* public static void main(String args[]) {
+     public static void main(String args[]) {
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -581,7 +581,7 @@ public class nilai extends javax.swing.JFrame {
                 new nilai().setVisible(true);
             }
         });
-    } */
+    } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnadd;
