@@ -14,4 +14,4 @@ Sistem CRUD: Implementasi lengkap Create, Read, Update, dan Delete pada seluruh 
 ## Link Video Test Aplikasi 
 <a href="https://drive.google.com/drive/folders/1k7y5qwpwDC3VgtQrvRqCdPKcWLYeQH6I?usp=sharing"> Aplikasi KRS & NILAI  </a>
 
-<h1> Dibuat Oleh Diky Raihan Subagja </h1>
+## Dibuat Oleh Diky Raihan Subagja
