@@ -80,7 +80,7 @@ public class nilai extends javax.swing.JFrame {
             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/db_uts", "root", "");
             String sql = "SELECT n.idn, m.nim, m.nama_mahasiswa, mk.nama_matkul, n.nakhir, n.grade, n.status_akhir "
                     + "FROM tb_nilai n "
-                    + "JOIN tb_mahasiswa m ON n.idm = m.idm " 
+                    + "JOIN tb_mahasiswa m ON n.idm = m.idm "
                     + "JOIN tb_matakuliah mk ON n.idmk = mk.idmk";
 
             PreparedStatement ps = cn.prepareStatement(sql);
@@ -120,6 +120,7 @@ public class nilai extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        btncl = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNim = new javax.swing.JTextField();
@@ -127,13 +128,13 @@ public class nilai extends javax.swing.JFrame {
         cbm = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         txtNilai = new javax.swing.JTextField();
-        btncl = new javax.swing.JButton();
         btnfind = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbn = new javax.swing.JTable();
         btnadd = new javax.swing.JButton();
         btndl = new javax.swing.JButton();
         btnup = new javax.swing.JButton();
+        btncetak = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -151,6 +152,15 @@ public class nilai extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/nilai.png"))); // NOI18N
         jLabel4.setText("Form Nilai");
 
+        btncl.setBackground(new java.awt.Color(250, 250, 210));
+        btncl.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btncl.setText("close");
+        btncl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnclActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -158,13 +168,17 @@ public class nilai extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btncl, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jLabel4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(btncl))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -184,15 +198,6 @@ public class nilai extends javax.swing.JFrame {
         cbm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         jLabel3.setText("Nilai Akhir");
-
-        btncl.setBackground(new java.awt.Color(250, 250, 210));
-        btncl.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        btncl.setText("close");
-        btncl.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnclActionPerformed(evt);
-            }
-        });
 
         btnfind.setBackground(new java.awt.Color(250, 250, 210));
         btnfind.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
@@ -214,6 +219,7 @@ public class nilai extends javax.swing.JFrame {
                 "NIM", "Nama Mahasiswa", "Mata Kuliah", "Nilai", "Grade", "Status"
             }
         ));
+        tbn.setFillsViewportHeight(true);
         tbn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbnMouseClicked(evt);
@@ -248,6 +254,15 @@ public class nilai extends javax.swing.JFrame {
             }
         });
 
+        btncetak.setBackground(new java.awt.Color(250, 250, 210));
+        btncetak.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btncetak.setText("Cetak");
+        btncetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -270,18 +285,17 @@ public class nilai extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(txtNilai, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btncl, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(24, 24, 24)
-                            .addComponent(btnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30)
-                            .addComponent(btndl, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(33, 33, 33)
-                            .addComponent(btnup, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(111, 111, 111))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(btnadd, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btndl, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnup, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btncetak, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,18 +307,18 @@ public class nilai extends javax.swing.JFrame {
                     .addComponent(cbm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(txtNilai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btncl)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(btnfind)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnadd)
                     .addComponent(btndl)
-                    .addComponent(btnup))
-                .addContainerGap(63, Short.MAX_VALUE))
+                    .addComponent(btnup)
+                    .addComponent(btncetak))
+                .addGap(33, 33, 33))
         );
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/tr.png"))); // NOI18N
@@ -387,11 +401,9 @@ public class nilai extends javax.swing.JFrame {
             String namaMatkul = cbm.getSelectedItem().toString();
             String nilaiStr = txtNilai.getText();
 
-            // (Validasi input kosong tetap sama...)
             double nilaiVal = Double.parseDouble(nilaiStr);
             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/db_uts", "root", "");
 
-            // 1. Ambil IDM berdasarkan NIM (karena input user adalah NIM)
             String sqlMhs = "SELECT idm FROM tb_mahasiswa WHERE nim=?";
             PreparedStatement psMhs = cn.prepareStatement(sqlMhs);
             psMhs.setString(1, nim);
@@ -403,7 +415,6 @@ public class nilai extends javax.swing.JFrame {
             }
             String idm = rsMhs.getString("idm");
 
-            // 2. Ambil IDMK berdasarkan Nama Matkul
             String sqlMk = "SELECT idmk FROM tb_matakuliah WHERE nama_matkul=?";
             PreparedStatement psMk = cn.prepareStatement(sqlMk);
             psMk.setString(1, namaMatkul);
@@ -414,7 +425,6 @@ public class nilai extends javax.swing.JFrame {
                 idmk = rsMk.getString("idmk");
             }
 
-            // 3. Cek Duplikat Nilai (Gunakan idm dan idmk)
             String sqlCek = "SELECT * FROM tb_nilai WHERE idm=? AND idmk=?";
             PreparedStatement psCek = cn.prepareStatement(sqlCek);
             psCek.setString(1, idm);
@@ -486,7 +496,7 @@ public class nilai extends javax.swing.JFrame {
         }
 
         try {
-            String idn = tbn.getValueAt(row, 0).toString(); 
+            String idn = tbn.getValueAt(row, 0).toString();
             String nimBaru = txtNim.getText();
             String matkulBaru = cbm.getSelectedItem().toString();
             double nilaiBaru = Double.parseDouble(txtNilai.getText());
@@ -524,9 +534,9 @@ public class nilai extends javax.swing.JFrame {
             psUp.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil diperbarui!");
 
-            tampilData(); 
+            tampilData();
             clearInput();
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error Update: " + e.getMessage());
         }
@@ -537,7 +547,7 @@ public class nilai extends javax.swing.JFrame {
 
         if (keyword.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Masukkan NIM untuk mencari!");
-            tampilData(); 
+            tampilData();
         } else {
             cariData(keyword);
         }
@@ -549,7 +559,7 @@ public class nilai extends javax.swing.JFrame {
         txtNim.setText(tbn.getValueAt(row, 1).toString());
         String matkul = tbn.getValueAt(row, 3).toString();
         cbm.setSelectedItem(matkul);
-        txtNilai.setText(tbn.getValueAt(row, 4).toString());       
+        txtNilai.setText(tbn.getValueAt(row, 4).toString());
     }//GEN-LAST:event_tbnMouseClicked
 
     private void btnclActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclActionPerformed
@@ -557,7 +567,18 @@ public class nilai extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnclActionPerformed
 
-     public static void main(String args[]) {
+    private void btncetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncetakActionPerformed
+        int row = tbn.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Pilih baris mahasiswa di tabel terlebih dahulu!");
+            return;
+        }
+        String nim = tbn.getValueAt(row, 1).toString();
+        CetakDialog cetak = new CetakDialog(this, true, nim);
+        cetak.setVisible(true);
+    }//GEN-LAST:event_btncetakActionPerformed
+
+     /* public static void main(String args[]) {
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -581,10 +602,11 @@ public class nilai extends javax.swing.JFrame {
                 new nilai().setVisible(true);
             }
         });
-    } 
+    }  */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnadd;
+    private javax.swing.JButton btncetak;
     private javax.swing.JButton btncl;
     private javax.swing.JButton btndl;
     private javax.swing.JButton btnfind;

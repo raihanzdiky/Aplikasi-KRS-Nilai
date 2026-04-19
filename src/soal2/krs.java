@@ -7,13 +7,14 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class krs extends javax.swing.JFrame {
 
     HashMap<String, String> mapMhs = new HashMap<>();
     HashMap<String, String> mapMk = new HashMap<>();
     HashMap<String, String> mapDosen = new HashMap<>();
-
+    
     public krs() {
         initComponents();
         setLocationRelativeTo(null);
@@ -22,14 +23,30 @@ public class krs extends javax.swing.JFrame {
         tabelKrs.getColumnModel().getColumn(0).setMinWidth(0);
         tabelKrs.getColumnModel().getColumn(0).setMaxWidth(0);
         tabelKrs.getColumnModel().getColumn(0).setWidth(0);
+        txtCari.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            
+            
+    @Override
+    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        filterData();
+    }
+
+    @Override
+    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        filterData();
+    }
+
+    @Override
+    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+        filterData();
+    }
+});
 
     }
 
     private void loadComboBox() {
         try {
             Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/db_uts", "root", "");
-
-            // 1. Load Mahasiswa (Menampilkan NIM - Nama, Menyimpan IDM)
             ResultSet rsMhs = cn.createStatement().executeQuery("SELECT idm, nim, nama_mahasiswa FROM tb_mahasiswa");
             cbNim.removeAllItems();
             mapMhs.clear();
@@ -40,8 +57,6 @@ public class krs extends javax.swing.JFrame {
                 mapMhs.put(tampil, id);
             }
 
-            // 2. Load Mata Kuliah (Menampilkan IDMK - Nama, Menyimpan IDMK)
-            // (Asumsi kolom kode matkul di database adalah 'id_matkul' atau 'kode_mk')
             ResultSet rsMk = cn.createStatement().executeQuery("SELECT idmk, id_matkul, nama_matkul FROM tb_matakuliah");
             cbMk.removeAllItems();
             mapMk.clear();
@@ -52,7 +67,6 @@ public class krs extends javax.swing.JFrame {
                 mapMk.put(tampil, id);
             }
 
-            // 3. Load Dosen (Menampilkan NIDN - Nama, Menyimpan IDS)
             ResultSet rsDosen = cn.createStatement().executeQuery("SELECT ids, nidn, nama_dosen FROM tb_dosen");
             cbNidn.removeAllItems();
             mapDosen.clear();
@@ -73,17 +87,25 @@ public class krs extends javax.swing.JFrame {
         cbMk.setSelectedIndex(0);
         cbNidn.setSelectedIndex(0);
         txtTanggal.setDate(null);
-        buttonGroup1.clearSelection(); // Membersihkan pilihan RadioButton
+        buttonGroup1.clearSelection();
     }
+    
+    private void filterData() {
+    String keyword = txtCari.getText().trim();
+    DefaultTableModel model = (DefaultTableModel) tabelKrs.getModel();
+    TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+    tabelKrs.setRowSorter(trs);
+    trs.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + keyword, 1, 2));
+}
 
     private void tampilDataKRS() {
         DefaultTableModel modelKrs = new DefaultTableModel();
         modelKrs.addColumn("ID KRS");
-        modelKrs.addColumn("NIM");        
-        modelKrs.addColumn("Nama Mhs");   
-        modelKrs.addColumn("Mata Kuliah"); 
-        modelKrs.addColumn("Dosen");       
-        modelKrs.addColumn("Tanggal");     
+        modelKrs.addColumn("NIM");
+        modelKrs.addColumn("Nama Mhs");
+        modelKrs.addColumn("Mata Kuliah");
+        modelKrs.addColumn("Dosen");
+        modelKrs.addColumn("Tanggal");
         modelKrs.addColumn("Status");
 
         try {
@@ -127,6 +149,7 @@ public class krs extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         cbNim = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -143,7 +166,9 @@ public class krs extends javax.swing.JFrame {
         txtTanggal = new com.toedter.calendar.JDateChooser();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        txtCari = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -161,6 +186,14 @@ public class krs extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/cl.png"))); // NOI18N
         jLabel6.setText("KRS Form");
 
+        jButton4.setBackground(new java.awt.Color(250, 250, 210));
+        jButton4.setText("close");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -168,13 +201,17 @@ public class krs extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jButton4))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -247,13 +284,22 @@ public class krs extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(250, 250, 210));
-        jButton4.setText("close");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton5.setBackground(new java.awt.Color(250, 250, 210));
+        jButton5.setText("cetak");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton5ActionPerformed(evt);
             }
         });
+
+        txtCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCariActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        jLabel7.setText("Cari (NIM/Nama) ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -282,18 +328,22 @@ public class krs extends javax.swing.JFrame {
                     .addComponent(cbMk, 0, 120, Short.MAX_VALUE)
                     .addComponent(cbNidn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(54, 54, 54)
-                .addComponent(jLabel4)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel7))
                 .addGap(44, 44, 44)
-                .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(281, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCari)
+                    .addComponent(txtTanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
+                .addContainerGap(221, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(48, 48, 48)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,7 +363,9 @@ public class krs extends javax.swing.JFrame {
                     .addComponent(rbDitolak)
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
-                    .addComponent(cbNidn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbNidn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
@@ -322,9 +374,9 @@ public class krs extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
                             .addComponent(jButton3)
-                            .addComponent(jButton2))
+                            .addComponent(jButton2)
+                            .addComponent(jButton5))
                         .addGap(75, 75, 75))))
         );
 
@@ -431,7 +483,7 @@ public class krs extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,
                         "Gagal! Mahasiswa tersebut sudah mengambil mata kuliah ini.",
                         "Data Duplikat", JOptionPane.WARNING_MESSAGE);
-                return; 
+                return;
             }
 
             int yakin = JOptionPane.showConfirmDialog(null, "Simpan data KRS ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -456,8 +508,8 @@ public class krs extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int row = tabelKrs.getSelectedRow(); 
-        
+        int row = tabelKrs.getSelectedRow();
+
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Pilih data di tabel yang ingin dihapus!");
             return;
@@ -487,7 +539,7 @@ public class krs extends javax.swing.JFrame {
     private void tabelKrsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelKrsMouseClicked
         int row = tabelKrs.getSelectedRow();
         if (row != -1) {
-            
+
             String nimMhs = tabelKrs.getValueAt(row, 1).toString();
             String namaMhs = tabelKrs.getValueAt(row, 2).toString();
             cbNim.setSelectedItem(nimMhs + " - " + namaMhs);
@@ -525,9 +577,18 @@ public class krs extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cbNidnActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String tampilMhs = cbNim.getSelectedItem().toString();
+        String idm = mapMhs.get(tampilMhs);
+        cetakKRS cetak = new cetakKRS(this, true, idm);
+        cetak.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
-   /* public static void main(String args[]) {
+    private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
 
+    }//GEN-LAST:event_txtCariActionPerformed
+
+     /* public static void main(String args[]) {
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -546,8 +607,6 @@ public class krs extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(krs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new krs().setVisible(true);
@@ -564,12 +623,14 @@ public class krs extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -582,6 +643,7 @@ public class krs extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbDiterima;
     private javax.swing.JRadioButton rbDitolak;
     private javax.swing.JTable tabelKrs;
+    private javax.swing.JTextField txtCari;
     private com.toedter.calendar.JDateChooser txtTanggal;
     // End of variables declaration//GEN-END:variables
 }
